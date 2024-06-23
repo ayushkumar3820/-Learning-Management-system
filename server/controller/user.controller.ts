@@ -8,6 +8,7 @@ import path from "path";
 import { NextFunction, Response, Request } from "express";
 import sendMail from "../utils/sendMail";
 import { sendToken } from "../utils/jwt";
+import { redis } from "../utils/redis";
 
 // Interface for registration body
 interface IRegistrationBody {
@@ -37,7 +38,7 @@ export const createActivationToken = (user: IRegistrationBody): IActivationToken
             expiresIn: "5m",
         }
     );
-    // console.log("Activation Code:", activationCode); // Log activation code
+    // console.log("Activation Code:", activationCode); 
     // console.log("Activation Token:", token); 
     return { token, activationCode };
 };
@@ -165,8 +166,15 @@ export const loginUser = CatchAsyncError(async (req: Request, res: Response, nex
 
 export const logoutUser = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
+       
         res.cookie("access_token", "", { maxAge: 1 });
         res.cookie("refresh_token", "", { maxAge: 1 });
+
+        const userId = req.user?._id;
+        
+        if (userId) {
+            await redis.del(userId.toString());
+        }
         res.status(200).json({
             success: true,
             message: "Logged out successfully"
