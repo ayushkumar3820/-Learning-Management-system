@@ -1,10 +1,14 @@
 {
     "cSpell.words": [
         "Authication",
+        "cloudinary",
         "Errormiddleware",
         "logoutuser",
         "middelware",
+        "profilepicture",
+        "socialauth",
         "thefunc",
-        "tokenexpirererror"
+        "tokenexpirererror",
+        "updateinfo"
     ]
 }

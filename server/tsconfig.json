@@ -1,16 +1,15 @@
 {
   "compilerOptions": {
-      "target": "ES6",
-      "module": "CommonJS",
-      "moduleResolution": "Node",
-      "outDir": "./dist",
-      "rootDir": "./",
-      "strict": false,
-      "esModuleInterop": true,
-      "skipLibCheck": true,
-      "typeRoots": ["./node_modules/@types", "./"],
-      "include": ["express.d.ts"]
+    "target": "ES6",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "outDir": "./dist",
+    "rootDir": "./",
+    "strict": false,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "typeRoots": ["./node_modules/@types", "./"]
   },
-  "include": ["server/**/*.ts", "server/**/*.js"],
+  "include": ["server/**/*.ts", "server/**/*.js", "express.d.ts"],
   "exclude": ["node_modules"]
 }
