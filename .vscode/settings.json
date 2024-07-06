@@ -2,6 +2,7 @@
     "cSpell.words": [
         "Authication",
         "cloudinary",
+        "couser",
         "Errormiddleware",
         "logoutuser",
         "middelware",
@@ -9,6 +10,7 @@
         "socialauth",
         "thefunc",
         "tokenexpirererror",
-        "updateinfo"
+        "updateinfo",
+        "uploadcouser"
     ]
 }

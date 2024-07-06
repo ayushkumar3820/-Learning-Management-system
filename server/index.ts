@@ -5,6 +5,7 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import { Errormiddleware } from './middelware/Error';
 import userRouter from './routes/user.router';
+import couserRouter from './routes/couser.router';
 
 export const app = express();
 
@@ -16,7 +17,7 @@ app.use(cors({ origin: process.env.ORIGIN }));
 
 // Mount the user routes
 app.use("/api/v1", userRouter);
-
+app.use("/api/v1", couserRouter);
 // Testing API
 app.get("/test", (req: Request, res: Response, next: NextFunction) => {
     res.status(200).json({

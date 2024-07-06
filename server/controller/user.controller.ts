@@ -10,7 +10,7 @@ import sendMail from "../utils/sendMail";
 import { sendToken,refreshTokenOptions, accessTokenOptions} from "../utils/jwt";
 import { redis } from "../utils/redis";
 import { getUserById } from "../services/user.services";
-import { error } from "console";
+
 import cloudinary from "cloudinary";
 
 // Interface for registration body
@@ -169,20 +169,25 @@ export const loginUser = CatchAsyncError(async (req: Request, res: Response, nex
 
 export const logoutUser = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
-       
+        // Set the access and refresh tokens to expire immediately
         res.cookie("access_token", "", { maxAge: 1 });
         res.cookie("refresh_token", "", { maxAge: 1 });
 
+        // Check if the user is authenticated and retrieve the user ID
         const userId = req.user?._id;
-        
+
+        // If a user ID exists, delete the user's session from Redis
         if (userId) {
             await redis.del(userId.toString());
         }
+
+        // Respond with a success message
         res.status(200).json({
             success: true,
             message: "Logged out successfully"
         });
     } catch (error: any) {
+        // Pass any errors to the error handler middleware
         next(new ErrorHandler(error.message, 400));
     }
 });
