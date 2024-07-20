@@ -42,12 +42,11 @@ export const isAuthication = async (req: AuthRequest, res: Response, next: NextF
 
 // Role basic logout and login 
 
-export const authorizeRoles=(...roles:string[])=>{
-    return  (req:Request,res:Response,next:NextFunction)=>{
-if(roles.includes(req.user?.role || ''))
-    {
-        return next (new ErrorHandler(`Role :${req.user?.role} is not allowed  to access  this resource `,403))
-    }
-
-    }
-}
+export const authorizeRoles = (...roles: string[]) => {
+    return (req: Request, res: Response, next: NextFunction) => {
+      if (!req.user || !roles.includes(req.user.role)) {
+        return next(new ErrorHandler(`Role: ${req.user?.role} is not allowed to access this resource`, 403));
+      }
+      next();
+    };
+  };
