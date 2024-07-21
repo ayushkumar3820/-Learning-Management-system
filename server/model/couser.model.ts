@@ -1,10 +1,11 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
+import { IUser } from "./user.model";
 
 // Define the interfaces
 interface IComment extends Document {
-    user: object;
-    comment: string;
-    commentReplies: IComment[];
+    user: IUser;
+    question: string;
+    questionReplies: IComment[];
 }
 
 interface IReview extends Document {
@@ -54,8 +55,8 @@ interface ICourser extends Document {
 // Define the schemas
 const commentSchema = new Schema<IComment>({
     user: Object,
-    comment: String,
-    commentReplies: [Object]
+    question: String,
+    questionReplies: [Object]
 });
 
 const reviewSchema = new Schema<IReview>({

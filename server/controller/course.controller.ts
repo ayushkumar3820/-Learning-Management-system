@@ -4,16 +4,18 @@ import { CatchAsyncError } from "../middelware/CatchAsyncError";
 import ErrorHandler from "../utils/ErrorHandle";
 import { createCourse } from "../services/couser.services";
 import CourserModel from "../model/couser.model";
-
 import { redis } from "../utils/redis";
 import mongoose from "mongoose";
+import sendMail from "../utils/sendMail";
+import ejs from "ejs";
+import path from "path";
 
 export const uploadCourse = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const data = req.body;
       const thumbnail = data.thumbnail;
-      console.log("222222222222222",thumbnail);
+      
 
       if (thumbnail) {
         const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
@@ -175,22 +177,42 @@ interface IAddQuestionData{
 
 
 
+interface IAddQuestionData {
+  question: string;
+  contentId: string;
+  courserId: string;
+}
+
 export const addQuestion = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { question, contentId, courserId }: IAddQuestionData = req.body;
+
+    // Validate courserId
+    if (!mongoose.Types.ObjectId.isValid(courserId)) {
+      return next(new ErrorHandler("Invalid course id", 400));
+    }
+
     const course = await CourserModel.findById(courserId);
+    if (!course) {
+      return next(new ErrorHandler("Course not found", 404));
+    }
 
+    // Validate contentId
     if (!mongoose.Types.ObjectId.isValid(contentId)) {
-      return next(new ErrorHandler("Invalid content id", 400));
+      return next(new ErrorHandler("Invalid content id format", 400));
     }
 
-    const courseContent = course?.courserData?.find((item: any) => item._id.equals(contentId));
-
+    const courseContent = course.courserData?.find((item: any) => item._id.toString() === contentId);
     if (!courseContent) {
-      return next(new ErrorHandler("Invalid Content id", 400));
+      return next(new ErrorHandler("Content not found in the course", 404));
     }
 
-    const newQuestion:any  = {
+    // Ensure questions array exists
+    if (!courseContent.questions) {
+      courseContent.questions = [];
+    }
+
+    const newQuestion: any = {
       user: req.user,
       question,
       questionReplies: [],
@@ -200,8 +222,90 @@ export const addQuestion = CatchAsyncError(async (req: Request, res: Response, n
     courseContent.questions.push(newQuestion);
 
     // Save the updated course
-    await course?.save();
+    await course.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Question added successfully",
+      course
+    });
   } catch (error: any) {
-    return next(new ErrorHandler(error.message, 400));
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+
+interface IAddAnswerData{
+  answer:string,
+  courserId:string,
+  contentId:string,
+  questionId:string
+
+}
+
+interface IAddAnswerData {
+  answer: string;
+  courserId: string;
+  contentId: string;
+  questionId: string;
+}
+
+export const addAnswer = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { answer, courserId, contentId, questionId }: IAddAnswerData = req.body;
+    const course = await CourserModel.findById(courserId);
+
+    if (!mongoose.Types.ObjectId.isValid(contentId)) {
+      return next(new ErrorHandler("Invalid content id", 400));
+    }
+
+    const courseContent = course?.courserData?.find((item: any) => item._id.equals(contentId));
+    if (!courseContent) {
+      return next(new ErrorHandler("Invalid Content id", 400));
+    }
+
+    const question = courseContent.questions?.find((item: any) => item._id.equals(questionId));
+    if (!question) {
+      return next(new ErrorHandler("Invalid Question id", 400));
+    }
+
+    const newAnswer: any = {
+      user: req.user, // Ensure user is a mongoose.Types.ObjectId
+      answer,
+    };
+
+    // Add this answer to course content
+    question.questionReplies.push(newAnswer);
+    await course?.save();
+
+    if(req.user?._id ===  question.user._id){
+      //create a notification 
+
+    }else{
+      const data={
+        name: question.user.name,
+        title:courseContent.title
+      }
+      const html = await ejs.renderFile(
+        path.join(__dirname, "../mails/question-reply.ejs"),
+        data
+      );
+ try{
+        await sendMail({
+          email:question.user.email,
+          subject:"Question-Reply ",
+          template:"question-reply.ejs",
+          data,
+        })
+      }catch(error:any){
+        return next(new ErrorHandler(error.message,500));
+      }
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Answer added successfully",
+    });
+  } catch (error: any) {
+    return next(new ErrorHandler(error.message, 500));
   }
 });
