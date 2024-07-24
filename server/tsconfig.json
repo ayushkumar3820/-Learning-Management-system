@@ -10,6 +10,6 @@
     "skipLibCheck": true,
     "typeRoots": ["./node_modules/@types", "./"]
   },
-  "include": ["server/**/*.ts", "server/**/*.js", "express.d.ts"],
+  "include": ["server/**/*.ts", "server/**/*.js", "express.d.ts","custom.d.ts"],
   "exclude": ["node_modules"]
 }

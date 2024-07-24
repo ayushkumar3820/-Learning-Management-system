@@ -9,6 +9,7 @@ import mongoose from "mongoose";
 import sendMail from "../utils/sendMail";
 import ejs from "ejs";
 import path from "path";
+import { IUser } from "../model/user.model";
 
 export const uploadCourse = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -304,6 +305,131 @@ export const addAnswer = CatchAsyncError(async (req: Request, res: Response, nex
     res.status(200).json({
       success: true,
       message: "Answer added successfully",
+    });
+  } catch (error: any) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+
+
+interface IReviewData{
+  review:string;
+  rating:number;
+  userId:string;
+}
+
+export const addReview = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+  console.log('Entering addReview function');
+  try {
+    // ... (existing logging code) ...
+
+    if (!req.user) {
+      console.log('User not authenticated');
+      return next(new ErrorHandler("User not authenticated", 401));
+    }
+
+    const courseId = req.params.id;
+    console.log('Course ID:', courseId);
+
+    if (!courseId) {
+      console.log('Course ID is missing');
+      return next(new ErrorHandler("Course ID is required", 400));
+    }
+
+    // Remove the course existence check in user's course list
+    // Instead, just check if the course exists in the database
+    console.log('Fetching course from database');
+    const course = await CourserModel.findById(courseId);
+    if (!course) {
+      console.log('Course not found in database');
+      return next(new ErrorHandler("Course not found", 404));
+    }
+
+    console.log('Course found:', JSON.stringify(course, null, 2));
+
+    const { review, rating } = req.body;
+    if (typeof review !== 'string' || typeof rating !== 'number') {
+      console.log('Invalid review data');
+      return next(new ErrorHandler("Invalid review data", 400));
+    }
+
+    const reviewData: any = {
+      user: req.user,
+      rating,
+      comment: review,
+    };
+
+    console.log('Review data:', JSON.stringify(reviewData, null, 2));
+
+    if (!Array.isArray(course.reviews)) {
+      console.log('Initializing course reviews array');
+      course.reviews = [];
+    }
+
+    course.reviews.push(reviewData);
+
+    // Calculate average rating
+    let avg = 0;
+    course.reviews.forEach((rev: any) => {
+      avg += rev.rating;
+    });
+    course.rating = avg / course.reviews.length;
+
+    console.log('Saving updated course');
+    await course.save();
+
+    console.log('Sending response');
+    res.status(200).json({
+      success: true,
+      course
+    });
+  } catch (error: any) {
+    console.error('Error in addReview:', error);
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+//Add reply  in review 
+
+interface  IAddReviewData{
+  comment:string,
+  reviewId:string,
+  courseId:string
+}
+
+
+export const addReplyReview = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { comment, reviewId, courseId } = req.body as IAddReviewData;
+
+    const course = await CourserModel.findById(courseId);
+    if (!course) {
+      return next(new ErrorHandler("Course not Found", 400));
+    }
+
+    const review = course.reviews?.find((rev: any) => rev._id.toString() === reviewId);
+    if (!review) {
+      return next(new ErrorHandler("Review not Found", 400));
+    }
+
+    const replyData: any = {
+      user: req.user ,
+      comment,
+    };
+
+
+    console.log("vvvvvvvvv",replyData);
+
+    if (!review.commentReplies) {
+      review.commentReplies = [];
+    }
+
+    review.commentReplies.push(replyData);
+
+    await course.save();
+
+    res.status(200).json({
+      success: true,
+      course,
     });
   } catch (error: any) {
     return next(new ErrorHandler(error.message, 500));
