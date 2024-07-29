@@ -8,3 +8,13 @@ export const createCourse = CatchAsyncError(async (req: Request, res: Response, 
     const course = await CourserModel.create(data);
     res.status(201).json({ success: true, course });
 });
+
+
+//Get All  Users
+export const getAllCourseServices=async(res:Response)=>{
+    const course=await CourserModel.find().sort({carateAt:-1})
+    res.status(201).json({
+      success:true,
+      course
+    })
+  }

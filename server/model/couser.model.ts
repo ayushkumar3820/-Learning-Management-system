@@ -134,6 +134,8 @@ const courserSchema = new Schema<ICourser>({
         type: Number,
         default: 0
     }
+},{
+    timestamps: true,
 });
 
 const CourserModel: Model<ICourser> = mongoose.model("course", courserSchema);
