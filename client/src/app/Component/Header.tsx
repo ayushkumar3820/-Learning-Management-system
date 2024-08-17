@@ -1,48 +1,39 @@
 "use client";
-import { relative } from "path";
-import React, { FC, useState } from "react";
-import NavItems from "../utils/NavItem";
-import { ThemeSwitcher } from "../utils/ThemeSwitcher";
+import React, { FC, useState, useEffect } from "react";
 import Link from "next/link";
 import { HiOutlineMenuAlt3, HiOutlineUserCircle } from "react-icons/hi";
-import CustomModal from "../utils/CustomModal";
-import Login from "../utils/auth/Login";
-import SignUp from "../utils/auth/Sign-Up";
-import verification from "../utils/auth/verification";
-
-
+import NavItems from "../utils/NavItem";
+import { ThemeSwitcher } from "../utils/ThemeSwitcher";
 
 type Props = {
   open: boolean;
   setOpen: (open: boolean) => void;
   activeItem: number;
-  route: string;
-  SetRoute: (route: string) => void;
 };
 
-
-export const Header: FC<Props> = ({
-  activeItem,
-  setOpen,
-  open,
-  route,
-  SetRoute,
-}) => {
+export const Header: FC<Props> = ({ activeItem, setOpen, open }) => {
   const [active, setActive] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
 
-  if (typeof window !== "undefined") {
-    window.addEventListener("scroll", () => {
+  useEffect(() => {
+    const handleScroll = () => {
       if (window.scrollY > 85) {
         setActive(true);
       } else {
         setActive(false);
       }
-    });
-  }
+    };
 
-  const handleClose = (e: any) => {
-    if (e.target.id === "screen") {
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  const handleClose = (e:any ) => {
+    const target = e.target as any ; // Typecast to HTMLDivElement
+    if (target.id === "screen") {
       setOpenSidebar(false);
     }
   };
@@ -52,7 +43,7 @@ export const Header: FC<Props> = ({
       <div
         className={`${
           active
-            ? "bg-opacity-50  dark:bg-gradient-to-b dark:from-gray-900 dark:to-black fixed top-0 left-0 w-full h-[80px] z-[80] border-b dark:border-[#ffffff1c]"
+            ? "dark:bg-opacity-50 dark:bg-gradient-to-b dark:from-gray-900 dark:to-black fixed top-0 left-0 w-full h-[80px] z-[80] border-b dark:border-[#ffffff1c] shadow-xl transition duration-500"
             : "w-full border-b dark:border-[#ffffff1c] h-[80px] z-[80] dark:shadow"
         }`}
       >
@@ -69,30 +60,24 @@ export const Header: FC<Props> = ({
             <div className="flex items-center">
               <NavItems activeItem={activeItem} isMobile={false} />
               <ThemeSwitcher />
-              {/* only for mobile */}
+              {/* Only for mobile */}
               <div className="800px:hidden">
                 <HiOutlineMenuAlt3
                   size={25}
                   className="cursor-pointer dark:text-white text-black"
                   onClick={() => setOpenSidebar(true)}
                 />
-
-                <HiOutlineUserCircle
-                  size={25}
-                  className="cursor-pointer dark:text-white text-black"
-                  onClick={() => setOpen(true)}
-                />
               </div>
               <HiOutlineUserCircle
                 size={25}
-                className=" hidden 800px:block cursor-pointer dark:text-white text-black"
+                className="hidden 800px:block cursor-pointer dark:text-white text-black"
                 onClick={() => setOpen(true)}
               />
             </div>
           </div>
         </div>
 
-        {/* Mobile sidebar */}
+        {/* Mobile Sidebar */}
         {openSidebar && (
           <div
             className="fixed w-full h-screen top-0 left-0 z-[99999] dark:bg-[unset] bg-[#00000024]"
@@ -106,55 +91,15 @@ export const Header: FC<Props> = ({
                 className="cursor-pointer ml-5 my-2 dark:text-white text-black"
                 onClick={() => setOpen(true)}
               />
-              <br></br>
               <br />
-              <p className="text-[16px]  px-2  pl-5  text-black dark:text-white">
+              <br />
+              <p className="text-[16px] px-2 pl-5 text-black dark:text-white">
                 CopyRight @ 2024 Ayush Kumar
               </p>
             </div>
           </div>
         )}
       </div>
-
-      {route === "Login" && (
-        <>
-          {open && (
-            <CustomModal
-              open={open}
-              setOpen={setOpen}
-              SetRoute={SetRoute}
-              activeItem={activeItem}
-              component={Login}
-            />
-          )}
-        </>
-      )}
-      {route === "Sign-Up" && (
-        <>
-          {open && (
-            <CustomModal
-              open={open}
-              setOpen={setOpen}
-              SetRoute={SetRoute}
-              activeItem={activeItem}
-              component={SignUp}
-            />
-          )}
-        </>
-      )}
-      {route === "verification " && (
-        <>
-          {open && (
-            <CustomModal
-              open={open}
-              setOpen={setOpen}
-              SetRoute={SetRoute}
-              activeItem={activeItem}
-              component={verification}
-            />
-          )}
-        </>
-      )}
     </div>
   );
 };

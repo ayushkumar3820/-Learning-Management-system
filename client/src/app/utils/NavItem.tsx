@@ -32,14 +32,16 @@ interface Props {
 const NavItems: React.FC<Props> = ({ activeItem, isMobile }) => {
   return (
     <>
+      {/* Desktop Navigation */}
       <div className="hidden 800px:flex">
-        {navItemData && navItemData.map((item, index) => (
-          <Link href={`${item.url}`} key={index} passHref>
+        {navItemData &&  navItemData.map((item, index) => (
+          <Link href={item.url} key={index}>
             <span
               className={`
-                ${activeItem === index
-                  ? "dark:text-[#37a39a] text-[crimson]"
-                  : "dark:text-black text-white"
+                ${
+                  activeItem === index
+                    ? "dark:text-[#37a39a] text-[crimson]"
+                    : "text-black dark:text-white"
                 } 
                 text-[18px] px-6 font-poppins font-[400]
               `}
@@ -49,6 +51,8 @@ const NavItems: React.FC<Props> = ({ activeItem, isMobile }) => {
           </Link>
         ))}
       </div>
+
+      {/* Mobile Navigation */}
       {isMobile && (
         <div className="800px:hidden mt-5">
           <div className="w-full text-center py-6">
@@ -58,15 +62,16 @@ const NavItems: React.FC<Props> = ({ activeItem, isMobile }) => {
               </span>
             </Link>
           </div>
-          {navItemData.map((item, index) => (
+          {navItemData && navItemData.map((item, index) => (
             <Link href={item.url} key={index}>
               <span
                 className={`
-                  ${activeItem === index
-                    ? "text-crimson dark:text-teal-400"
-                    : "text-black dark:text-white"
+                  ${
+                    activeItem === index
+                      ? "text-[crimson] dark:text-[#37a39a]"
+                      : "text-black dark:text-white"
                   }
-                  block text-lg px-6 py-2 font-poppins font-normal
+                  block py-5 text-[18px] px-6 font-poppins font-[400]
                 `}
               >
                 {item.name}

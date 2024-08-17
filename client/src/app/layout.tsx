@@ -1,22 +1,20 @@
 import type { Metadata } from "next";
 import { Inter, Josefin_Sans, Poppins } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "next-themes";
-import { Toaster } from "react-hot-toast";
 
+import { Toaster } from "react-hot-toast";
+import { ThemeProvider } from "./utils/theme-provider";
 const poppins = Poppins({
   subsets: ["latin"],
-  variable: "--font-poppins",
+  variable: "--font-Poppins",
   weight: ["400", "500", "600", "700"],
 });
 
 const josefin = Josefin_Sans({
   subsets: ["latin"],
-  variable: "--font-josefin",
+  variable: "--font-Josefin",
   weight: ["400", "500", "600", "700"],
 });
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -30,10 +28,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${poppins.variable} ${josefin.variable}`}>
-      <body className="bg-white dark:bg-gradient-to-b dark:from-green-900 dark:to-black-900">
+      <body
+        className={`bg-white dark:bg-gray-900 bg-no-repeat dark:bg-gradient-to-b dark:from-gray-900 dark:to-black duration-300`}
+      >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
-         <Toaster position='top-center'  reverseOrder={false}/>
+          <Toaster position="top-center" reverseOrder={false} />
         </ThemeProvider>
       </body>
     </html>

@@ -1,8 +1,8 @@
 'use client'
 import React, { FC, useState } from "react";
 import Heading from "./utils/Heading";
-import {Header} from './Components/Header';
-import Hero from './Components/Router/Hero';
+import { Header } from "./Component/Header";
+import Hero from './Component/Router/Hero';
 interface Props {}
 
 const Page: FC<Props> = () => {
@@ -21,8 +21,7 @@ const Page: FC<Props> = () => {
         open={open}
         setOpen={setOpen}
         activeItem={activeItem}
-        SetRoute={SetRoute}
-        route={route}
+        
       />
       <Hero />
     </div>
