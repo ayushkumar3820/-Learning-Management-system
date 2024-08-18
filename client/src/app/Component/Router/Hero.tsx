@@ -7,25 +7,23 @@ type Props = {};
 
 const Hero: FC<Props> = () => {
   return (
-    <div className="w-full flex items-center justify-between bg-[#0e0e1c] text-white p-8">
-      <div className="w-1/2 relative">
-        <div className="absolute top-[50px] left-[50px] w-[500px] h-[500px] bg-blue-900 rounded-full opacity-50" />
+    <div className="w-full flex items-center bg-[#0e0e1c] text-white p-8 relative">
+      <div className="w-1/2 relative flex justify-center items-center">
+        <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-blue-900 rounded-full opacity-50" />
         <div className="relative z-10">
           <Image
-            src="/assets/student-illustration.png"
-            alt="Online Learning"
-            width={600}
-            height={600}
-            className="object-contain"
+            src={require("../../../../public/assets/Banner.jpg")}
+            alt="Banner"
+            className="object-contain max-w-full h-auto"
           />
         </div>
       </div>
-      <div className="w-1/2 pl-8">
+      <div className="w-1/2 pl-8 z-20">
         <h1 className="text-5xl font-bold mb-4 leading-tight">
           Improve Your Online Learning Experience Better Instantly
         </h1>
         <p className="mb-6 text-gray-300">
-          We have 40k+ Online courses & 500K+ Online registered student. Find your desired Courses from them.
+          We have 40k+ Online courses & 500K+ Online registered students. Find your desired Courses from them.
         </p>
         <div className="relative mb-6">
           <input

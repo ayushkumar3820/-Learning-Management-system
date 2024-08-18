@@ -4,14 +4,18 @@ import Link from "next/link";
 import { HiOutlineMenuAlt3, HiOutlineUserCircle } from "react-icons/hi";
 import NavItems from "../utils/NavItem";
 import { ThemeSwitcher } from "../utils/ThemeSwitcher";
+import CustomModal from "../utils/CustomerModel";
+import Login from "../Component/Auth/Login";
 
 type Props = {
   open: boolean;
   setOpen: (open: boolean) => void;
   activeItem: number;
+  route: string;
+  SetRoute: (route: string) => void;
 };
 
-export const Header: FC<Props> = ({ activeItem, setOpen, open }) => {
+export const Header: FC<Props> = ({ activeItem, setOpen, open, route, SetRoute }) => {
   const [active, setActive] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
 
@@ -31,9 +35,8 @@ export const Header: FC<Props> = ({ activeItem, setOpen, open }) => {
     };
   }, []);
 
-  const handleClose = (e:any ) => {
-    const target = e.target as any ; // Typecast to HTMLDivElement
-    if (target.id === "screen") {
+  const handleClose = (e: any) => {
+    if (e.target.id === "screen") {
       setOpenSidebar(false);
     }
   };
@@ -100,6 +103,19 @@ export const Header: FC<Props> = ({ activeItem, setOpen, open }) => {
           </div>
         )}
       </div>
+      {route === "Login" && (
+        <>
+          {open && (
+            <CustomModal
+              open={open}
+              setOpen={setOpen}
+              SetRoute={SetRoute}
+              activeItem={activeItem}
+              component={Login}
+            />
+          )}
+        </>
+      )}
     </div>
   );
 };

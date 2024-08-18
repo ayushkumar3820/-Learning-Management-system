@@ -21,6 +21,8 @@ const Page: FC<Props> = () => {
         open={open}
         setOpen={setOpen}
         activeItem={activeItem}
+        SetRoute={SetRoute}
+        route={route}
         
       />
       <Hero />
