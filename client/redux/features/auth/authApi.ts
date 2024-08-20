@@ -1,4 +1,3 @@
-import { register } from "module";
 import { apiSlice } from "../api/apiSlice";
 import { userRegistration } from "./authSlice";
 
@@ -7,17 +6,20 @@ type RegistrationResponse = {
     activationToken: string;
 };
 
-type RegistrationData = {};
+type RegistrationData = {
+    username: string;
+    password: string;
+    email: string;
+};
 
 export const authApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
-        // Endpoints
         register: builder.mutation<RegistrationResponse, RegistrationData>({
             query: (data) => ({
-                url: "register",
+                url: "/registration",
                 method: "POST",
                 body: data,
-                credentials: "include" as const,
+                credentials: "include" as  const , // Include credentials such as cookies
             }),
             async onQueryStarted(arg, { queryFulfilled, dispatch }) {
                 try {
@@ -28,7 +30,7 @@ export const authApi = apiSlice.injectEndpoints({
                         })
                     );
                 } catch (error: any) {
-                    console.log(error);
+                    console.error("Registration failed:", error);
                 }
             },
         }),

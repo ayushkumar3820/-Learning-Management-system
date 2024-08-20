@@ -9,9 +9,8 @@ import {
 } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import { styles } from "../../../app/styles/style";
-import { userRegistration } from "../../../../redux/features/auth/authSlice";
 import { useRegisterMutation } from "../../../../redux/features/auth/authApi";
-import toast from "react-hot-toast/headless";
+import toast from "react-hot-toast";
 
 type Props = {
   SetRoute: (route: string) => void;
@@ -33,24 +32,26 @@ const SignUp: FC<Props> = ({ SetRoute }) => {
 
   useEffect(() => {
     if (isSuccess) {
-      const message = data?.message || "Register successfully";
+      const message = data?.message || "Registered successfully";
       toast.success(message);
       SetRoute("verification");
     }
-    if (error) {
+    if (isError) {
       if ("data" in error) {
         const errorData = error as any;
         toast.error(errorData.data.message);
+      } else {
+        toast.error("Registration failed");
       }
     }
-  }, [isSuccess, error]);
+  }, [isSuccess, isError, data, error, SetRoute]);
 
   const formik = useFormik({
     initialValues: { name: "", email: "", password: "" },
     validationSchema: schema,
     onSubmit: async ({ name, email, password }) => {
       const data = {
-        name,
+       username: name,
         email,
         password,
       };
@@ -83,25 +84,28 @@ const SignUp: FC<Props> = ({ SetRoute }) => {
             <span className="text-red-500 pt-2 block">{errors.name}</span>
           )}
         </div>
-        <label htmlFor="email" className={`${styles.label}`}>
-          Enter your email
-        </label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          value={values.email}
-          onChange={handleChange}
-          placeholder="loginemail@email.com"
-          className={`${errors.email && touched.email && "border-red-500"} ${
-            styles.input
-          }`}
-        />
-        {touched.email && errors.email && (
-          <span className="text-red-500 pt-2 block">{errors.email}</span>
-        )}
 
-        <div className="relative">
+        <div className="mb-3">
+          <label htmlFor="email" className={`${styles.label}`}>
+            Enter your email
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={values.email}
+            onChange={handleChange}
+            placeholder="loginemail@email.com"
+            className={`${errors.email && touched.email && "border-red-500"} ${
+              styles.input
+            }`}
+          />
+          {touched.email && errors.email && (
+            <span className="text-red-500 pt-2 block">{errors.email}</span>
+          )}
+        </div>
+
+        <div className="relative mb-3">
           <label htmlFor="password" className={`${styles.label}`}>
             Enter your password
           </label>
@@ -133,24 +137,25 @@ const SignUp: FC<Props> = ({ SetRoute }) => {
         {touched.password && errors.password && (
           <span className="text-red-500 pt-2 block">{errors.password}</span>
         )}
+
         <div className="w-full mt-5">
-          <input type="submit" value="Sing Up" className={`${styles.button}`} />
+          <input type="submit" value="Sign Up" className={`${styles.button}`} />
         </div>
         <br />
-        <h5 className="text-center  pt-4  font-Poppins text-[14px]  text-black  dark:text-white">
+        <h5 className="text-center pt-4 font-Poppins text-[14px] text-black dark:text-white">
           OR JOIN WITH
         </h5>
         <div className="flex items-center justify-center my-3">
           <FcGoogle size={30} className="cursor-pointer mr-2" />
           <AiFillGithub size={30} className="cursor-pointer ml-2" />
         </div>
-        <h5 className="text-center  pt-4  font-Poppins text-[14px] ">
-          Already have an account ?{""}
+        <h5 className="text-center pt-4 font-Poppins text-[14px]">
+          Already have an account?
           <span
-            className="text-[#2190ff] pl-1  cursor-pointer "
-            onClick={() => SetRoute("Sign-Up")}
+            className="text-[#2190ff] pl-1 cursor-pointer"
+            onClick={() => SetRoute("Sign-In")}
           >
-            Sing In
+            Sign In
           </span>
         </h5>
       </form>
