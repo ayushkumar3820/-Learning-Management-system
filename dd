@@ -1,0 +1,89 @@
+[33mcommit 143e9d78ea65a0c2ed2399db5f8ae7f23d297aa9[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: ayushkumar3820 <ayushkumarnbd125@gamil.com>
+Date:   Tue Aug 20 16:39:26 2024 +0530
+
+    fix mail issues
+
+[33mcommit 704e2f9377ad0562a626c10d7fae207a39bb0be3[m
+Author: ayushkumar3820 <ayushkumarnbd125@gamil.com>
+Date:   Tue Aug 20 11:03:13 2024 +0530
+
+    part 3 completed
+
+[33mcommit c2130ed0d19f5b05e91dc328d2b72b74f21409b8[m
+Author: ayushkumar3820 <ayushkumarnbd125@gamil.com>
+Date:   Mon Aug 19 09:19:54 2024 +0530
+
+    veriftion and login with signup page compted
+
+[33mcommit 1f6bd75c60366a29c795325f266a25918035cd37[m
+Author: ayushkumar3820 <ayushkumarnbd125@gamil.com>
+Date:   Sun Aug 18 10:15:29 2024 +0530
+
+    login part complted
+
+[33mcommit ee2ad376d69e25572ca46d05790f66416368218f[m
+Author: ayushkumar3820 <ayushkumarnbd125@gamil.com>
+Date:   Sat Aug 17 09:30:52 2024 +0530
+
+    fix hero page
+
+[33mcommit 3b26b8088ec2933a9d1f9e542312433e2fa01bf8[m
+Author: ayushkumar3820 <ayushkumarnbd125@gamil.com>
+Date:   Mon Aug 5 23:54:59 2024 +0530
+
+    add auth
+
+[33mcommit 924afc0b5a4970ba0fc82f016afea7c9d6f6c0fa[m
+Author: ayushkumar3820 <ayushkumarnbd125@gamil.com>
+Date:   Tue Jul 30 16:51:57 2024 +0530
+
+    part completed
+
+[33mcommit 782f9c16ef326bba340a380063de6f23b2bfa7ef[m
+Author: ayushkumar3820 <ayushkumarnbd125@gamil.com>
+Date:   Mon Jul 29 11:55:58 2024 +0530
+
+    add some part
+
+[33mcommit 24164345d31b07f453f7521ac49cadbf8cf9ab3f[m
+Author: ayushkumar3820 <ayushkumarnbd125@gamil.com>
+Date:   Wed Jul 24 09:56:00 2024 +0530
+
+    add order and notification model part
+
+[33mcommit ec6db6cf9cba4b65294fd865929021c655301516[m
+Author: ayushkumar3820 <ayushkumarnbd125@gamil.com>
+Date:   Sun Jul 21 14:50:46 2024 +0530
+
+    add question and answer
+
+[33mcommit e1cbc51f68f79ac950fd727b661ed3b59ba13f5e[m
+Author: ayushkumar3820 <ayushkumarnbd125@gamil.com>
+Date:   Sat Jul 20 18:14:07 2024 +0530
+
+    fix bug and getcouser and add question controller
+
+[33mcommit 4487e3cf53354c70c57cf27445a6e7ad1425e95b[m
+Author: ayushkumar3820 <ayushkumarnbd125@gamil.com>
+Date:   Sat Jul 6 20:40:59 2024 +0530
+
+     course api done
+
+[33mcommit 8e1b913e7de6e80276b7c9d9c3ecc4a226162af9[m
+Author: ayushkumar3820 <ayushkumarnbd125@gamil.com>
+Date:   Tue Jun 25 23:47:30 2024 +0530
+
+    user part finish
+
+[33mcommit dbe2d0138aec4b13d0093628766ac52aa4f90e39[m
+Author: ayushkumar3820 <ayushkumarnbd125@gamil.com>
+Date:   Sun Jun 23 12:59:35 2024 +0530
+
+    login and logout bug fixed
+
+[33mcommit 6377a066d6c2b25356cd666bfabefa62df83928d[m
+Author: ayushkumar3820 <ayushkumarnbd125@gamil.com>
+Date:   Sat Jun 22 19:24:32 2024 +0530
+
+    login and logout

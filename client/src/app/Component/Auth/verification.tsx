@@ -17,7 +17,8 @@ type VerifyNumber = {
 }
 
 const Verification: FC<Props> = ({ setRoute }) => {
-    const { token } = useSelector((state: any) => state.auth);
+    const { token, name } = useSelector((state: any) => state.auth);
+    console.log("Activation token:", token);
     const [activation, { isSuccess, error }] = useActivationMutation();
     const [invalidError, setInvalidError] = useState<boolean>(false);
 
@@ -29,10 +30,11 @@ const Verification: FC<Props> = ({ setRoute }) => {
         if (error) {
             if ("data" in error) {
                 const errorData = error as any;
-                toast.error(errorData.data.message);
+                toast.error(errorData.data.message || "Activation failed");
                 setInvalidError(true);
             } else {
                 console.log('An error occurred:', error);
+                toast.error("An unexpected error occurred");
             }
         }
     }, [isSuccess, error, setRoute]);
@@ -57,10 +59,16 @@ const Verification: FC<Props> = ({ setRoute }) => {
             setInvalidError(true);
             return;
         }
-        await activation({
-            activation_token: token,
-            activation_code: verificationNumber,
-        });
+        try {
+            await activation({
+                activation_token: token,
+                activation_code: verificationNumber,
+                name: name, // Include `name` if required by your backend
+            });
+        } catch (err) {
+            console.error("Activation error:", err);
+            toast.error("Failed to send activation request");
+        }
     };
 
     const handleInputChange = (index: number, value: string) => {
